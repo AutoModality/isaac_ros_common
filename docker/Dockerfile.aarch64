@@ -17,27 +17,26 @@ SHELL ["/bin/bash", "-c"]
 
 # Ensure we have universe
 RUN apt-get update \
-        && apt-get install -y software-properties-common \
-        && add-apt-repository universe
-
+    && apt-get install -y software-properties-common \
+    && add-apt-repository universe \
 # Fundamentals
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    ca-certificates \
-    curl \
-    git \
-    gnupg2 \
-    iputils-ping \
-    lsb-release \
-    sudo \
-    tar \
-    unzip \
-    vim \
-    wget \
-    libgoogle-glog-dev \
-    software-properties-common \
-&& rm -rf /var/lib/apt/lists/* \
-&& apt-get clean
+    && apt-get update && apt-get install -y \
+        build-essential \
+        ca-certificates \
+        curl \
+        git \
+        gnupg2 \
+        iputils-ping \
+        lsb-release \
+        sudo \
+        tar \
+        unzip \
+        vim \
+        wget \
+        libgoogle-glog-dev \
+        software-properties-common \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
 
 # Upgrade cmake to 3.22.1 to match Ubuntu 22.04
 RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null \
@@ -46,8 +45,8 @@ RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/nul
     && apt-get remove -y cmake && apt-get purge -y cmake && apt-get remove -y cmake-data && apt-get purge -y cmake-data \
     && apt-get install -y cmake=3.22.1-0kitware1ubuntu20.04.1 cmake-data=3.22.1-0kitware1ubuntu20.04.1 \
     && cmake --version \
-&& rm -rf /var/lib/apt/lists/* \
-&& apt-get clean
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
 
 # Set Python3 as default
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
@@ -58,53 +57,41 @@ RUN apt-get update && apt-get install -y \
         python3-flake8 \
         python3-pip \
         python3-pytest-cov \
-&& rm -rf /var/lib/apt/lists/* \
-&& apt-get clean
-
 # Install OpenCV dependencies
-RUN apt-get update && apt-get install -y \
-    libavformat-dev \
-    libjpeg-dev \
-    libopenjp2-7-dev \
-    libpng-dev \
-    libpq-dev \
-    libswscale-dev \
-    libtbb2 \
-    libtbb-dev \
-    libtiff-dev \
-    pkg-config \
-    yasm \
-&& rm -rf /var/lib/apt/lists/* \
-&& apt-get clean
-
+        libavformat-dev \
+        libjpeg-dev \
+        libopenjp2-7-dev \
+        libpng-dev \
+        libpq-dev \
+        libswscale-dev \
+        libtbb2 \
+        libtbb-dev \
+        libtiff-dev \
+        pkg-config \
+        yasm \
 # Install additional packages needed for ROS 2 dependencies
-RUN apt-get update && apt-get install -y \
-    python3-distutils \
-    libboost-all-dev \
-    libboost-dev \
-    libpcl-dev \
-    libode-dev \
-    lcov \
-    python3-zmq \
-    libxaw7-dev \
-    libgraphicsmagick++1-dev \
-    graphicsmagick-libmagick-dev-compat \
-    libceres-dev \
-    libsuitesparse-dev \
-    libncurses5-dev \
-    libassimp-dev \
-    libyaml-cpp-dev \
-    libpcap-dev \
-&& rm -rf /var/lib/apt/lists/* \
-&& apt-get clean
-
+        python3-distutils \
+        libboost-all-dev \
+        libboost-dev \
+        libpcl-dev \
+        libode-dev \
+        lcov \
+        python3-zmq \
+        libxaw7-dev \
+        libgraphicsmagick++1-dev \
+        graphicsmagick-libmagick-dev-compat \
+        libceres-dev \
+        libsuitesparse-dev \
+        libncurses5-dev \
+        libassimp-dev \
+        libyaml-cpp-dev \
+        libpcap-dev \
 # sklearn dependencies
-RUN apt-get update && apt-get install -y \
-    gfortran \
-    libatlas-base-dev \
-    python3-scipy \
-&& rm -rf /var/lib/apt/lists/* \
-&& apt-get clean
+        gfortran \
+        libatlas-base-dev \
+        python3-scipy \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
 
 # sklearn Python dependencies
 RUN python3 -m pip install -U \
@@ -119,15 +106,15 @@ RUN python3 -m pip install -U \
 RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && \
         apt-get update && apt-get install -y \
         git-lfs \
-&& rm -rf /var/lib/apt/lists/* \
-&& apt-get clean
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
 
 # Install TensorRT and VPI
 RUN apt-get update && apt-get install -y \
         tensorrt \
         vpi2-dev \
-&& rm -rf /var/lib/apt/lists/* \
-&& apt-get clean
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
 
 # Install tao-converter
 COPY tao/tao-converter-aarch64-tensorrt8.4.zip /opt/nvidia/tao/tao-converter-aarch64-tensorrt8.4.zip
@@ -159,19 +146,19 @@ RUN python3 -m pip install --no-cache \
 
 # Install Triton server 2.24 from https://github.com/triton-inference-server/server/releases/tag/v2.24.0
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    autoconf \
-    automake \
-    libb64-dev \
-    libcurl4-openssl-dev \
-    libopenblas-dev \
-    libre2-dev \
-    libssl-dev \
-    libtool \
-    patchelf \
-    rapidjson-dev \
-    zlib1g-dev \
-&& rm -rf /var/lib/apt/lists/* \
-&& apt-get clean
+        autoconf \
+        automake \
+        libb64-dev \
+        libcurl4-openssl-dev \
+        libopenblas-dev \
+        libre2-dev \
+        libssl-dev \
+        libtool \
+        patchelf \
+        rapidjson-dev \
+        zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
 
 RUN mkdir -p /opt/tritonserver && cd /opt/tritonserver \
     && wget https://github.com/triton-inference-server/server/releases/download/v2.24.0/tritonserver2.24.0-jetpack5.0.2.tgz \
@@ -185,13 +172,13 @@ RUN apt-add-repository ppa:mosquitto-dev/mosquitto-ppa \
     && apt-get update && apt-get install -y \
         mosquitto \
         mosquitto-clients \
-&& rm -rf /var/lib/apt/lists/* \
-&& apt-get clean
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
 
 # Note: VPN cannot be on for pymongo download
 RUN python3 -m pip install -U \
-  pymongo \
-  paho-mqtt
+        pymongo \
+        paho-mqtt
 
 # Core dev libraries
 RUN apt-get update && apt-get install -y \
