@@ -37,20 +37,19 @@ RUN wget -qO - https://isaac.download.nvidia.com/isaac-ros/repos.key | apt-key a
     grep -qxF 'deb https://isaac.download.nvidia.com/isaac-ros/ubuntu/main focal main' /etc/apt/sources.list || \
     echo 'deb https://isaac.download.nvidia.com/isaac-ros/ubuntu/main focal main' | tee -a /etc/apt/sources.list
 
-# ROS fundamentals and Basics
+# Basics
+RUN apt-get update && apt-get install -y \
+        curl \
+        gnupg \
+        lsb-release \
+&& rm -rf /var/lib/apt/lists/* \
+&& apt-get clean
+
+# ROS fundamentals
 RUN apt-get update && apt-get install -y \
         build-essential \
-curl \
-        devscripts \
-        dh-make \
-        fakeroot \
         git \
-gnupg \
-        libxtensor-dev \
         libyaml-cpp-dev=0.7.0+dfsg-8backport \
-locales \
-        lsb-release \
-        python3-bloom \
         python3-colcon-common-extensions \
         python3-pip \
         python3-pybind11 \
@@ -58,7 +57,6 @@ locales \
         python3-rosdep \
         python3-rosinstall-generator \
         python3-vcstool \
-quilt \
         wget \
 && rm -rf /var/lib/apt/lists/* \
 && apt-get clean
@@ -77,6 +75,17 @@ RUN python3 -m pip install -U \
         pytest-rerunfailures \
         pytest \
         setuptools==65.7.0
+
+# Basics
+RUN apt-get update && apt-get install -y \
+        curl \
+        gnupg \
+        locales \
+        lsb-release \
+        python3-bloom \
+        libxtensor-dev \
+&& rm -rf /var/lib/apt/lists/* \
+&& apt-get clean
 
 # Install ROS 2 Humble
 RUN apt-get update && apt-get install -y ros-humble-ros-base \
@@ -119,6 +128,16 @@ RUN apt-get update && apt-get install -y ros-humble-ros-base \
     ros-humble-v4l2-camera \
     ros-humble-vision-opencv \
     ros-humble-vision-msgs \
+&& rm -rf /var/lib/apt/lists/* \
+&& apt-get clean
+
+# Build Essentials
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    devscripts \
+    dh-make \
+    quilt \
+    fakeroot \
 && rm -rf /var/lib/apt/lists/* \
 && apt-get clean
 
